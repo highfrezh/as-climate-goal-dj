@@ -1,14 +1,14 @@
 # Core web framework
-Django==6.0.3
+Django>=5.0.0
 
 # Pure-Python MySQL Database Connector (Required for Aiven MySQL)
-PyMySQL>=1.2.1
+PyMySQL>=1.1.0
 
 # Image processing library (Required for models.ImageField support)
-Pillow==12.1.1
+Pillow>=10.0.0
 
 # Production server
-gunicorn==23.0.0
+gunicorn>=21.0.0
 
 # Static file compression & delivery
-whitenoise==6.8.2
+whitenoise>=6.6.0
