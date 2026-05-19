@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AS Climate Admin — Modern Content Studio</title>
+    <!-- Tailwind + Google Fonts + Font Awesome Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    {% if settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ settings.favicon.url }}">
+    {% endif %}
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0F3B2C',      // deep forest
+                        accent: '#E67E22',      // warm terracotta
+                        surface: '#F9FAFB',
+                        border: '#EFF3F6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { transform: 'translateY(8px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* custom scroll & modern touches */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .ql-toolbar.ql-snow { border-radius: 1rem 1rem 0 0; border-color: #e9eef3; background: white; padding: 12px 16px; }
+        .ql-container.ql-snow { border-radius: 0 0 1rem 1rem; border-color: #e9eef3; background: white; font-family: 'Inter', sans-serif; font-size: 0.9rem; }
+        .ql-editor { min-height: 180px; }
+        .rich-editor + .quill-editor .ql-editor { font-size: 0.9rem; line-height: 1.5; }
+        input, select, textarea { transition: all 0.2s ease; }
+        .card-hover { transition: all 0.25s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(0,0,0,0.08); }
+        .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .table-row-transition { transition: background 0.2s; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-[#F5F7FB] font-sans antialiased text-gray-800">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar (modern clean) -->
+        <aside class="w-72 bg-primary text-white shadow-2xl hidden md:flex flex-col fixed h-full z-20">
+            <div class="px-6 pt-8 pb-6 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
+                        <i class="fas fa-leaf text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-extrabold tracking-tight text-white">Climate<span class="text-accent">Studio</span></h1>
+                        <p class="text-[11px] font-medium text-white/40 uppercase tracking-wider">admin ecosystem</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 px-4 py-6 space-y-1.5">
+                <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if request.resolver_match.url_name == 'dashboard' %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-chart-line w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'manage_research' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if 'research' in request.path %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-microscope w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Research Links</span>
+                </a>
+                <a href="{% url 'manage_climate_articles' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if '/articles/' in request.path %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-newspaper w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Climate Articles</span>
+                </a>
+                <a href="{% url 'manage_authors' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if '/authors/' in request.path %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-users w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Authors</span>
+                </a>
+                <a href="{% url 'manage_subscribers' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if 'subscribers' in request.path %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-envelope-open-text w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Subscribers</span>
+                </a>
+                <a href="{% url 'manage_inbox' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if 'inbox' in request.path %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-inbox w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Inbox</span>
+                </a>
+                <a href="{% url 'manage_settings' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if 'settings' in request.path %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-sliders-h w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Site Settings</span>
+                </a>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'manage_users' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 font-medium hover:bg-white/10 hover:text-white transition group {% if 'users' in request.path %}bg-white/10 text-white font-semibold{% endif %}">
+                    <i class="fas fa-user-shield w-5 text-white/40 group-hover:text-white transition"></i>
+                    <span>Manage Users</span>
+                </a>
+                {% endif %}
+            </nav>
+
+            <div class="p-5 border-t border-white/10 mt-auto">
+                <div class="flex items-center gap-3 bg-white/5 p-3 rounded-2xl">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center text-white font-bold shadow-sm border border-white/10">
+                        {{ request.user.username|slice:":1"|upper }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-white truncate">{{ request.user.username }}</p>
+                        <p class="text-[10px] font-semibold text-white/40 uppercase tracking-wide">Content curator</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-2">
+                    <a href="{% url 'index' %}" target="_blank" class="flex-1 flex items-center justify-center gap-2 bg-white/10 border border-white/10 text-white text-xs font-semibold py-2 rounded-xl hover:bg-white/20 transition">
+                        <i class="fas fa-external-link-alt text-xs"></i> Website
+                    </a>
+                    <a href="{% url 'logout' %}" class="flex-1 flex items-center justify-center gap-2 bg-red-500/10 text-red-300 text-xs font-semibold py-2 rounded-xl hover:bg-red-500/20 transition">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content (improved spacing + modern card aesthetics) -->
+        <main class="flex-1 md:ml-72 p-5 md:p-8 lg:p-12 w-full">
+            <div class="animate-fade-in">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- Global Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-[60] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-4">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden animate-slide-up">
+                <div class="p-8 text-center">
+                    <div class="w-20 h-20 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-exclamation-triangle text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Confirm Delete</h3>
+                    <p class="text-gray-500 mb-8" id="deleteModalMessage">Are you sure you want to permanently remove this item? This action cannot be undone.</p>
+                    
+                    <div class="flex gap-4">
+                        <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition">
+                            Cancel
+                        </button>
+                        <a id="deleteModalConfirmBtn" href="#" class="flex-1 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition shadow-lg shadow-red-500/20">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script>
+        // Global Modal Logic (Generic for Delete/Toggle/etc)
+        function openDeleteModal(url, message = null, btnText = 'Delete', btnColor = 'bg-red-500') {
+            const modal = document.getElementById('deleteModal');
+            const confirmBtn = document.getElementById('deleteModalConfirmBtn');
+            const messageEl = document.getElementById('deleteModalMessage');
+            
+            confirmBtn.href = url;
+            if (message) messageEl.innerHTML = message;
+            
+            // Update button text and style
+            confirmBtn.textContent = btnText;
+            confirmBtn.className = `flex-1 px-6 py-3 ${btnColor} text-white font-bold rounded-xl hover:opacity-90 transition shadow-lg`;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDeleteModal();
+        });
+
+        // Quill Rich Editor Logic
+        document.querySelectorAll('.rich-editor').forEach(function(textarea) {
+            var container = document.createElement('div');
+            container.className = 'quill-editor min-h-[200px] mb-2 rounded-xl';
+            textarea.parentNode.insertBefore(container, textarea);
+            textarea.classList.add('hidden');
+            var quill = new Quill(container, {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['link', 'blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['clean']
+                    ]
+                }
+            });
+            quill.root.innerHTML = textarea.value;
+            quill.on('text-change', function() {
+                textarea.value = quill.root.innerHTML;
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

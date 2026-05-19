@@ -1,0 +1,527 @@
+{% extends 'articles/dashboard/base.html' %}
+
+{% block content %}
+<div class="space-y-10 animate-fade-in">
+    <!-- Header with Navigation Tabs -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2 text-accent font-semibold text-sm uppercase tracking-wide mb-1">
+                <i class="fas fa-cog"></i>
+                <span>Configuration Center</span>
+            </div>
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Site Management</h1>
+            <p class="text-gray-500 mt-2">Manage global content, team profiles, and publication details.</p>
+        </div>
+        
+        <!-- Quick Status Indicator -->
+        <div class="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span class="text-sm font-medium text-green-700">All systems operational</span>
+        </div>
+    </div>
+
+    <!-- Settings Navigation Tabs (Sticky) -->
+    <div class="sticky top-0 z-10 bg-gray-50/95 backdrop-blur-sm -mx-5 px-5 py-3 border-b border-gray-200">
+        <div class="flex gap-2 overflow-x-auto pb-2">
+            <button class="settings-tab active px-5 py-2.5 rounded-xl font-semibold text-sm transition-all" data-tab="general">
+                <i class="fas fa-sliders-h mr-2"></i>General
+            </button>
+            <button class="settings-tab px-5 py-2.5 rounded-xl font-semibold text-sm transition-all" data-tab="founder">
+                <i class="fas fa-user-tie mr-2"></i>Founder Profile
+            </button>
+            <button class="settings-tab px-5 py-2.5 rounded-xl font-semibold text-sm transition-all" data-tab="branding">
+                <i class="fas fa-palette mr-2"></i>Branding
+            </button>
+        </div>
+    </div>
+
+    <!-- General Configuration Section -->
+    <section id="general-section" class="settings-section active">
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-gray-50 to-white px-8 py-6 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <i class="fas fa-globe text-primary text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">General Configuration</h3>
+                        <p class="text-gray-500 text-sm">Control homepage content, hero section, and site-wide settings</p>
+                    </div>
+                </div>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data" class="p-8">
+                {% csrf_token %}
+                <input type="hidden" name="settings_form">
+                
+                <div class="space-y-8">
+                    <!-- Logo Upload Section -->
+                    <div class="flex flex-col md:flex-row gap-8 items-start border-b border-gray-100 pb-8">
+                        <div class="flex-1">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-image text-primary mr-2"></i>Site Logo
+                            </label>
+                            <div class="mt-1 flex items-center gap-4">
+                                {% if settings.logo %}
+                                <div class="relative group">
+                                    <img id="logo-preview" src="{{ settings.logo.url }}" class="w-20 h-20 rounded-xl object-cover border-2 border-primary/20">
+                                    <label for="{{ settings_form.logo.id_for_label }}" class="absolute inset-0 bg-black/50 rounded-xl opacity-0 group-hover:opacity-100 transition flex items-center justify-center cursor-pointer">
+                                        <i class="fas fa-camera text-white text-sm"></i>
+                                    </label>
+                                </div>
+                                {% else %}
+                                <div class="relative group">
+                                    <div id="logo-preview-placeholder" class="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-200">
+                                        <i class="fas fa-image text-gray-400"></i>
+                                    </div>
+                                    <img id="logo-preview" src="#" class="w-20 h-20 rounded-xl object-cover border-2 border-primary/20 hidden">
+                                </div>
+                                {% endif %}
+                                <div class="flex-1">
+                                    <div class="hidden-file-input">
+                                        {{ settings_form.logo }}
+                                    </div>
+                                    <label for="{{ settings_form.logo.id_for_label }}" class="inline-block bg-white border border-gray-200 px-4 py-2 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer transition">
+                                        Choose New Logo
+                                    </label>
+                                    <p class="text-xs text-gray-400 mt-1">Recommended: PNG or JPG, 500x500px</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Favicon Preview -->
+                        <div class="flex-1">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">
+                                <i class="fas fa-fingerprint text-primary mr-2"></i>Favicon
+                            </label>
+                            <div class="flex items-center gap-4">
+                                <div class="relative group">
+                                    {% if settings.favicon %}
+                                    <img id="favicon-preview" src="{{ settings.favicon.url }}" class="w-12 h-12 rounded-lg object-cover border border-gray-200">
+                                    {% else %}
+                                    <div id="favicon-placeholder" class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center border border-gray-200">
+                                        <i class="fas fa-leaf text-gray-400"></i>
+                                    </div>
+                                    <img id="favicon-preview" src="#" class="w-12 h-12 rounded-lg object-cover border border-gray-200 hidden">
+                                    {% endif %}
+                                    <label for="{{ settings_form.favicon.id_for_label }}" class="absolute inset-0 bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition flex items-center justify-center cursor-pointer">
+                                        <i class="fas fa-camera text-white text-[10px]"></i>
+                                    </label>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="hidden-file-input">
+                                        {{ settings_form.favicon }}
+                                    </div>
+                                    <label for="{{ settings_form.favicon.id_for_label }}" class="text-xs text-primary font-bold hover:underline cursor-pointer">
+                                        Change Favicon
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content Fields -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {% for field in settings_form %}
+                            {% if field.name not in 'logo,favicon' %}
+                            <div class="{% if field.name in 'hero_subtitle,intro_description,mission,vision,values,hero_image,hero_video,intro_image,privacy_policy' %}lg:col-span-2{% endif %}">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                    <span class="text-red-500">*</span>
+                                    {% endif %}
+                                </label>
+                                
+                                {% if field.name == 'hero_image' or field.name == 'intro_image' or field.name == 'hero_video' %}
+                                    <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                        <div class="relative group">
+                                            {% with image_val=field.value %}
+                                                {% if image_val %}
+                                                    {% if field.name == 'hero_video' %}
+                                                    <div class="w-32 h-20 bg-gray-900 rounded-xl flex items-center justify-center border border-gray-700">
+                                                        <i class="fas fa-video text-white text-xl"></i>
+                                                    </div>
+                                                    {% else %}
+                                                    <img id="{{ field.name }}-preview" src="/media/{{ image_val }}" class="w-32 h-20 rounded-xl object-cover border border-gray-200">
+                                                    {% endif %}
+                                                {% else %}
+                                                <div id="{{ field.name }}-placeholder" class="w-32 h-20 bg-gray-200 rounded-xl flex items-center justify-center border border-gray-300">
+                                                    <i class="fas {% if field.name == 'hero_video' %}fa-video{% else %}fa-image{% endif %} text-gray-400"></i>
+                                                </div>
+                                                <img id="{{ field.name }}-preview" src="#" class="w-32 h-20 rounded-xl object-cover border border-gray-200 hidden">
+                                                {% endif %}
+                                            {% endwith %}
+                                            <label for="{{ field.id_for_label }}" class="absolute inset-0 bg-black/50 rounded-xl opacity-0 group-hover:opacity-100 transition flex items-center justify-center cursor-pointer">
+                                                <i class="fas fa-camera text-white"></i>
+                                            </label>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="hidden-file-input">
+                                                {{ field }}
+                                            </div>
+                                            <label for="{{ field.id_for_label }}" class="inline-block bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-primary/90 transition cursor-pointer">
+                                                Update {% if field.name == 'hero_video' %}Video{% else %}Image{% endif %}
+                                            </label>
+                                            <p class="text-[10px] text-gray-400 mt-2">{% if field.name == 'hero_video' %}Recommended: MP4 video (under 10MB){% else %}Recommended: High-resolution landscape image{% endif %}</p>
+                                        </div>
+                                    </div>
+                                {% elif 'description' in field.name or field.name == 'mission' or field.name == 'vision' %}
+                                    <div class="relative">
+                                        {{ field }}
+                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                                            <span class="char-count">0</span>/500
+                                        </div>
+                                    </div>
+                                {% elif field.name == 'hero_subtitle' %}
+                                    {{ field }}
+                                    <p class="text-xs text-gray-400 mt-1">Appears below main headline on homepage</p>
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                                
+                                {% if field.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <br><br>    
+                    
+                    <!-- Form Actions -->
+                    <div class="flex gap-3 pt-6 border-t border-gray-100">
+                        <button type="submit" class="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition shadow-md flex items-center gap-2">
+                            <i class="fas fa-save"></i> Save General Settings
+                        </button>
+                        <button type="reset" class="px-8 py-3 rounded-xl font-medium text-gray-600 hover:bg-gray-100 transition">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Founder Bio Section -->
+    <section id="founder-section" class="settings-section">
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-accent/5 to-white px-8 py-6 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+                        <i class="fas fa-user-tie text-accent text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">Founder Profile</h3>
+                        <p class="text-gray-500 text-sm">Manage founder biography, photo, and social links</p>
+                    </div>
+                </div>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data" class="p-8">
+                {% csrf_token %}
+                <input type="hidden" name="founder_form">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Profile Photo Column -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-gray-50 rounded-2xl p-6 text-center">
+                            <div class="w-40 h-40 rounded-full mx-auto mb-4 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg relative group">
+                                {% if founder.photo %}
+                                <img id="founder-preview" src="{{ founder.photo.url }}" class="w-full h-full object-cover">
+                                {% else %}
+                                <div id="founder-placeholder" class="flex flex-col items-center">
+                                    <i class="fas fa-user-circle text-6xl text-gray-400"></i>
+                                </div>
+                                <img id="founder-preview" src="#" class="w-full h-full object-cover hidden">
+                                {% endif %}
+                                <label for="{{ founder_form.photo.id_for_label }}" class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center cursor-pointer">
+                                    <i class="fas fa-camera text-white text-2xl"></i>
+                                </label>
+                            </div>
+                            <div class="hidden-file-input">
+                                {{ founder_form.photo }}
+                            </div>
+                            <label for="{{ founder_form.photo.id_for_label }}" class="inline-block mt-2 text-sm text-primary font-semibold hover:underline cursor-pointer">
+                                <i class="fas fa-upload mr-1"></i> Upload Founder Photo
+                            </label>
+                            <p class="text-xs text-gray-400 mt-2">JPG, PNG or GIF. Max 5MB</p>
+                            
+                            <!-- Social Links Preview -->
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <p class="text-xs font-bold text-gray-400 uppercase mb-3">Social Presence</p>
+                                <div class="flex justify-center gap-3">
+                                    <i class="fab fa-twitter text-gray-400 hover:text-primary cursor-pointer transition"></i>
+                                    <i class="fab fa-linkedin text-gray-400 hover:text-primary cursor-pointer transition"></i>
+                                    <i class="fab fa-github text-gray-400 hover:text-primary cursor-pointer transition"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bio Fields Column -->
+                    <div class="lg:col-span-2 space-y-6">
+                        {% for field in founder_form %}
+                            {% if field.name != 'photo' %}
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ field.label }}
+                                </label>
+                                {% if field.name == 'bio' %}
+                                    <div class="relative">
+                                        {{ field }}
+                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                                            <span class="char-count">{{ field.value|length|default:"0" }}</span>/1000
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    {{ field }}
+                                {% endif %}
+                                {% if field.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <button type="submit" class="bg-accent text-white px-8 py-3 rounded-xl font-bold hover:bg-accent/90 transition shadow-md flex items-center gap-2">
+                            <i class="fas fa-user-edit"></i> Update Profile
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Branding Section (New) -->
+    <section id="branding-section" class="settings-section">
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-50 to-white px-8 py-6 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                        <i class="fas fa-palette text-purple-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">Branding & Design</h3>
+                        <p class="text-gray-500 text-sm">Customize colors, typography, and visual identity</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Color Picker Section -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-semibold text-gray-700">Primary Brand Color</label>
+                        <div class="flex items-center gap-3">
+                            <input type="color" value="#1a5c3a" class="w-16 h-16 rounded-xl border-2 border-gray-200 cursor-pointer">
+                            <input type="text" value="#1a5c3a" class="flex-1 font-mono text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
+                        </div>
+                        
+                        <label class="block text-sm font-semibold text-gray-700 mt-4">Accent Color</label>
+                        <div class="flex items-center gap-3">
+                            <input type="color" value="#d4860b" class="w-16 h-16 rounded-xl border-2 border-gray-200 cursor-pointer">
+                            <input type="text" value="#d4860b" class="flex-1 font-mono text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
+                        </div>
+                    </div>
+                    
+                    <!-- Typography Preview -->
+                    <div class="space-y-4">
+                        <label class="block text-sm font-semibold text-gray-700">Heading Font</label>
+                        <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2">
+                            <option>Inter (Default)</option>
+                            <option>Poppins</option>
+                            <option>DM Sans</option>
+                            <option>Montserrat</option>
+                        </select>
+                        
+                        <div class="mt-4 p-4 bg-gray-50 rounded-xl">
+                            <p class="text-xs text-gray-500 mb-2">Live Preview</p>
+                            <h4 class="text-lg font-bold text-primary">Sample Heading</h4>
+                            <p class="text-sm text-gray-600">This is how your content will appear across the site.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 mt-8 pt-6 border-t border-gray-100">
+                    <button class="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 transition">
+                        Save Branding
+                    </button>
+                    <button class="px-8 py-3 rounded-xl font-medium text-gray-600 hover:bg-gray-100 transition">
+                        Reset to Default
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-out;
+    }
+    
+    /* Settings Section Toggle */
+    .settings-section {
+        display: none;
+    }
+    
+    .settings-section.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out;
+    }
+    
+    /* Tab Styles */
+    .settings-tab {
+        background: transparent;
+        color: #6b7280;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .settings-tab:hover {
+        background: #f3f4f6;
+        color: #1a5c3a;
+    }
+    
+    .settings-tab.active {
+        background: #1a5c3a;
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Form Input Styles */
+    input:not([type="color"]), select, textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #1a5c3a;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(26, 92, 58, 0.1);
+    }
+    
+    /* Hidden file input styling */
+    .hidden-file-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+    
+    /* Character counter styling */
+    .char-count {
+        font-size: 0.7rem;
+        color: #9ca3af;
+    }
+    
+    /* File input styling */
+    input[type="file"] {
+        padding: 0.5rem;
+        background: white;
+        border: 1px dashed #d1d5db;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .settings-tab {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Tab switching functionality
+    document.querySelectorAll('.settings-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Hide all sections
+            document.querySelectorAll('.settings-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(`${tabId}-section`).classList.add('active');
+        });
+    });
+    
+    // Character counter for textareas
+    document.querySelectorAll('textarea').forEach(textarea => {
+        const counter = textarea.parentElement.querySelector('.char-count');
+        if (counter) {
+            const updateCounter = () => {
+                const length = textarea.value.length;
+                counter.textContent = length;
+                if (length > 400) counter.style.color = '#ef4444';
+                else counter.style.color = '#9ca3af';
+            };
+            textarea.addEventListener('input', updateCounter);
+            updateCounter();
+        }
+    });
+    
+    // Auto-save indicator (optional)
+    let saveTimeout;
+    document.querySelectorAll('form input, form select, form textarea').forEach(field => {
+        field.addEventListener('change', () => {
+            const saveIndicator = document.createElement('div');
+            saveIndicator.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg text-sm animate-fade-in';
+            saveIndicator.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Changes detected';
+            document.body.appendChild(saveIndicator);
+            setTimeout(() => saveIndicator.remove(), 2000);
+        });
+    });
+    
+    // Image preview functionality
+    function setupImagePreview(inputId, previewId, placeholderId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        const placeholder = placeholderId ? document.getElementById(placeholderId) : null;
+
+        if (input && preview) {
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                        if (placeholder) placeholder.classList.add('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    }
+
+    // Initialize previews
+    setupImagePreview('{{ settings_form.logo.id_for_label }}', 'logo-preview', 'logo-preview-placeholder');
+    setupImagePreview('{{ founder_form.photo.id_for_label }}', 'founder-preview', 'founder-placeholder');
+    setupImagePreview('{{ settings_form.favicon.id_for_label }}', 'favicon-preview', 'favicon-placeholder');
+    setupImagePreview('{{ settings_form.hero_image.id_for_label }}', 'hero_image-preview', 'hero_image-placeholder');
+    setupImagePreview('{{ settings_form.intro_image.id_for_label }}', 'intro_image-preview', 'intro_image-placeholder');
+</script>
+{% endblock %}

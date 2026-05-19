@@ -1,0 +1,407 @@
+{% extends 'articles/base.html' %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-primary">
+        {% if settings.hero_video %}
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover">
+            <source src="{{ settings.hero_video.url }}" type="video/mp4">
+        </video>
+        {% else %}
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% if settings.hero_image %}{{ settings.hero_image.url }}{% else %}https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80{% endif %}');"></div>
+        {% endif %}
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/70 to-accent/60"></div>
+        <div class="relative z-10 container mx-auto px-6 text-center">
+            <div class="max-w-4xl mx-auto animate-fade-in">
+                <h1 class="font-playfair text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                    {{ settings.hero_title|default:"Welcome to Alimat Sustainability Climate Goal" }}
+                </h1>
+                <p class="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto font-light">
+                    {{ settings.hero_subtitle|default:"Alimat Sustainability Climate Goal Agenda is “Empowering communities to discover the truth about climate change through reading, writing, and action.”" }}
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#intro" class="bg-white text-primary px-8 py-3.5 rounded-full font-bold shadow-lg hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                        Get Started
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="space-y-32 py-24">
+        <!-- Intro Section -->
+        <section id="intro" class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1">
+                    <div class="relative rounded-3xl overflow-hidden shadow-2xl hover-scale">
+                        {% if settings.intro_image %}
+                        <img src="{{ settings.intro_image.url }}" class="w-full h-full object-cover">
+                        {% else %}
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80" class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 space-y-8">
+                    <div>
+                        <div class="inline-block bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4">Our Vision</div>
+                        <h2 class="font-playfair text-4xl lg:text-5xl font-bold text-primary mb-6">
+                            {{ settings.intro_title|default:"Introduction to Global Climate Change" }}
+                        </h2>
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        {{ settings.intro_description|default:"Climate change is not just a global issue — it’s a story that affects every home, business, and community in Africa. Through this learning hub, we invite you to read, write, and explore materials that help you understand the Negligence of Climate Change in Africa and take meaningful action." }}
+                    </p>
+                    <div class="space-y-4 pt-4">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-primary/10 p-1 rounded-full"><svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg></div>
+                            <p class="text-gray-700 font-medium"><strong>Vision:</strong> {{ settings.vision }}</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-primary/10 p-1 rounded-full"><svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg></div>
+                            <p class="text-gray-700 font-medium"><strong>Mission:</strong> {{ settings.mission }}</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="bg-primary/10 p-1 rounded-full"><svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg></div>
+                            <p class="text-gray-700 font-medium"><strong>Core Values:</strong> {{ settings.values }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Featured Insights Sect        <!-- Latest & Featured Insights Section -->
+        <section id="articles" class="container mx-auto px-6">
+            <div class="flex items-center justify-between mb-12">
+                <div class="max-w-2xl">
+                    <div class="inline-block bg-accent/10 text-accent px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4">Latest Insights</div>
+                    <h2 class="font-playfair text-4xl font-bold text-primary">Exploring Climate Truths</h2>
+                </div>
+            </div>
+
+            {% if featured_articles and page_obj.number == 1 %}
+            <div class="grid lg:grid-cols-12 gap-12 mb-20">
+                <!-- Primary Post (70%) -->
+                <div class="lg:col-span-8">
+                        {% with primary=featured_articles.0 %}
+                        <div class="relative rounded-[2.5rem] overflow-hidden group shadow-2xl h-[500px] lg:h-[600px]">
+                            {% if primary.custom_thumbnail %}
+                            <img src="{{ primary.custom_thumbnail.url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            {% elif primary.video_id %}
+                            <img src="https://img.youtube.com/vi/{{ primary.video_id }}/maxresdefault.jpg" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            {% endif %}
+                            <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-10 w-full">
+                                <span class="bg-accent text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest mb-4 inline-block">
+                                    {% if primary.is_featured %}Featured Story{% else %}Top Story{% endif %}
+                                </span>
+                                <h3 class="text-3xl md:text-5xl font-playfair font-bold text-white mb-4 leading-tight">{{ primary.title }}</h3>
+                                <p class="text-white/80 line-clamp-2 mb-8 max-w-xl">{{ primary.description }}</p>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="{% url 'article_detail' primary.slug %}" class="inline-flex items-center gap-3 bg-white text-primary px-8 py-3.5 rounded-xl font-bold hover:bg-accent hover:text-white transition group/btn">
+                                        Read Full Story
+                                        <svg class="w-5 h-5 group-hover/btn:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                    </a>
+                                    {% if primary.pdf_report %}
+                                    <a href="{{ primary.pdf_report.url }}" target="_blank" class="inline-flex items-center gap-3 bg-white/10 text-white border border-white/20 backdrop-blur-sm px-8 py-3.5 rounded-xl font-bold hover:bg-white/20 transition">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                        View PDF
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endwith %}
+                </div>
+
+                <!-- Sidebar (30%) -->
+                <div class="lg:col-span-4 space-y-8">
+                    <h3 class="text-xl font-bold text-primary flex items-center gap-3 mb-6">
+                        <span class="w-8 h-[2px] bg-accent"></span>
+                        Recommended
+                    </h3>
+                    {% for article in featured_articles|slice:"1:5" %}
+                    <a href="{% url 'article_detail' article.slug %}" class="flex gap-4 group">
+                        <div class="w-24 h-24 shrink-0 rounded-2xl overflow-hidden shadow-md">
+                            {% if article.custom_thumbnail %}
+                            <img src="{{ article.custom_thumbnail.url }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            {% elif article.video_id %}
+                            <img src="https://img.youtube.com/vi/{{ article.video_id }}/mqdefault.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            {% endif %}
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <span class="text-accent text-[10px] font-bold uppercase tracking-widest mb-1">
+                                {% if article.is_featured %}Featured{% else %}{{ article.category }}{% endif %}
+                            </span>
+                            <h4 class="text-sm font-bold text-primary group-hover:text-accent transition line-clamp-2 leading-snug">{{ article.title }}</h4>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Standard Grid for remaining -->
+            {% if page_obj.object_list %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    {% for video in page_obj %}
+                        <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl transition-all group">
+                            <div class="relative aspect-video bg-black">
+                                {% if video.custom_thumbnail %}
+                                <img src="{{ video.custom_thumbnail.url }}" class="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition">
+                                {% elif video.platform == 'youtube' %}
+                                <img src="https://img.youtube.com/vi/{{ video.video_id }}/mqdefault.jpg" class="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition">
+                                {% elif video.platform == 'tiktok' %}
+                                <img src="https://www.tiktok.com/api/img/?itemId={{ video.video_id }}&location=0" class="w-full h-full object-cover opacity-70 group-hover:opacity-60 transition">
+                                {% endif %}
+                                
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <a href="{% url 'article_detail' video.slug %}" class="w-16 h-16 bg-white/95 rounded-full flex items-center justify-center text-primary shadow-2xl scale-90 group-hover:scale-100 transition duration-300">
+                                        <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="p-8">
+                                <div class="flex items-center gap-4 mb-6">
+                                    {% if video.author %}
+                                    <a href="{% url 'author_detail' video.author.slug %}" class="flex items-center gap-4 group/author">
+                                        {% if video.author.photo %}
+                                        <img src="{{ video.author.photo.url }}" class="w-10 h-10 rounded-full object-cover border-2 border-primary/20 group-hover/author:border-accent transition">
+                                        {% else %}
+                                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm font-bold">
+                                            {{ video.author.name|slice:":1" }}
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <div class="text-sm font-bold text-primary group-hover/author:text-accent transition">{{ video.author.name }}</div>
+                                            <div class="text-[11px] text-gray-400 font-medium">{{ video.author.role }}</div>
+                                        </div>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'article_detail' video.slug %}">
+                                    <h3 class="font-playfair text-xl font-bold mb-3 leading-tight hover:text-primary transition">{{ video.title }}</h3>
+                                </a>
+                                <p class="text-sm text-gray-500 line-clamp-2 mb-6">{{ video.description }}</p>
+                                <div class="flex gap-3">
+                                    <a href="{% url 'article_detail' video.slug %}" class="flex-1 bg-black text-white py-2.5 rounded-xl text-center text-xs font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                                        Read Article
+                                    </a>
+                                    {% if video.pdf_report %}
+                                    <a href="{{ video.pdf_report.url }}" target="_blank" class="px-5 border border-primary text-primary py-2.5 rounded-xl text-xs font-bold hover:bg-primary hover:text-white transition flex items-center justify-center gap-2">
+                                        View PDF
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <div class="flex justify-center mt-16">
+                    <nav class="inline-flex rounded-full shadow-sm bg-white p-2 border border-gray-100" aria-label="Pagination">
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.rpage %}&rpage={{ request.GET.rpage }}{% endif %}#articles" class="inline-flex items-center justify-center w-10 h-10 text-primary hover:bg-primary/5 rounded-full transition duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </a>
+                        {% else %}
+                        <span class="inline-flex items-center justify-center w-10 h-10 text-gray-300 rounded-full cursor-not-allowed">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </span>
+                        {% endif %}
+                        
+                        <div class="flex items-center px-4 space-x-1">
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <span class="inline-flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold shadow-md">{{ num }}</span>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <a href="?page={{ num }}{% if request.GET.rpage %}&rpage={{ request.GET.rpage }}{% endif %}#articles" class="inline-flex items-center justify-center w-10 h-10 text-gray-600 hover:bg-primary/5 hover:text-primary rounded-full font-medium transition duration-200">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.rpage %}&rpage={{ request.GET.rpage }}{% endif %}#articles" class="inline-flex items-center justify-center w-10 h-10 text-primary hover:bg-primary/5 rounded-full transition duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                        {% else %}
+                        <span class="inline-flex items-center justify-center w-10 h-10 text-gray-300 rounded-full cursor-not-allowed">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </span>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% endif %}
+            {% elif not featured_articles and not page_obj.object_list %}
+                <!-- DEMO CARDS (Only show if no articles added yet) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    {% for i in "1"|make_list %}
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl transition-all group opacity-80 hover:opacity-100">
+                        <div class="relative aspect-video bg-black">
+                            <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80" class="w-full h-full object-cover opacity-60">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center text-primary shadow-2xl scale-90 group-hover:scale-100 transition duration-300">
+                                    <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="absolute top-6 left-6 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-full flex items-center gap-2">
+                                 <div class="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                                 Demo Content
+                            </div>
+                        </div>
+                        <div class="p-8">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm font-bold">D</div>
+                                    <div>
+                                    <div class="text-sm font-bold text-primary">Demo Contributor</div>
+                                    <div class="text-[11px] text-gray-400 font-medium">Climate Expert</div>
+                                </div>
+                            </div>
+                            <h3 class="font-playfair text-xl font-bold mb-3 leading-tight">Climate Resilience in Local Communities</h3>
+                            <p class="text-sm text-gray-500 line-clamp-2 mb-6">This is a placeholder to show how your articles will look. Once you add videos in the Admin panel, this will be replaced.</p>
+                            <div class="flex gap-3">
+                                <button class="flex-1 bg-black text-white py-2.5 rounded-xl text-center text-xs font-bold opacity-50 cursor-not-allowed">Watch Full Video</button>
+                                <button class="px-5 border border-primary text-primary py-2.5 rounded-xl text-xs font-bold opacity-50 cursor-not-allowed">PDF Report</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </section>
+
+        <!-- Research & Links Sections -->
+        <section id="research" class="container mx-auto px-6">
+            <div class="space-y-24">
+                <!-- Academic Research -->
+                                <div>
+                    <div class="mb-12">
+                        <h2 class="font-playfair text-3xl font-bold text-primary">Academic Research Links</h2>
+                        <div class="w-20 h-1 bg-accent mt-4"></div>
+                            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {% for article in research_links %}
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col hover:shadow-xl transition duration-300 group">
+                            <h3 class="text-xl font-bold mb-4 group-hover:text-primary transition leading-snug">{{ article.title }}</h3>
+                            <p class="text-sm text-gray-500 mb-8 flex-grow leading-relaxed">{{ article.description }}</p>
+                            <a href="{{ article.external_url }}" target="_blank" class="w-full py-3 bg-gray-50 text-primary font-bold rounded-xl text-center text-xs hover:bg-primary hover:text-white transition uppercase tracking-wider">Explore Link</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+
+                    <!-- Research Pagination -->
+                    {% if research_page_obj.has_other_pages %}
+                    <div class="flex justify-center mt-12">
+                        <nav class="inline-flex rounded-full shadow-sm bg-white p-2 border border-gray-100" aria-label="Research Pagination">
+                            {% if research_page_obj.has_previous %}
+                            <a href="?rpage={{ research_page_obj.previous_page_number }}{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}#research" class="inline-flex items-center justify-center w-10 h-10 text-primary hover:bg-primary/5 rounded-full transition duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </a>
+                            {% else %}
+                            <span class="inline-flex items-center justify-center w-10 h-10 text-gray-300 rounded-full cursor-not-allowed">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </span>
+                            {% endif %}
+                            
+                            <div class="flex items-center px-4 space-x-1">
+                                {% for num in research_page_obj.paginator.page_range %}
+                                    {% if research_page_obj.number == num %}
+                                        <span class="inline-flex items-center justify-center w-10 h-10 bg-primary text-white rounded-full font-bold shadow-md">{{ num }}</span>
+                                    {% elif num > research_page_obj.number|add:'-3' and num < research_page_obj.number|add:'3' %}
+                                        <a href="?rpage={{ num }}{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}#research" class="inline-flex items-center justify-center w-10 h-10 text-gray-600 hover:bg-primary/5 hover:text-primary rounded-full font-medium transition duration-200">{{ num }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            {% if research_page_obj.has_next %}
+                            <a href="?rpage={{ research_page_obj.next_page_number }}{% if request.GET.page %}&page={{ request.GET.page }}{% endif %}#research" class="inline-flex items-center justify-center w-10 h-10 text-primary hover:bg-primary/5 rounded-full transition duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </a>
+                            {% else %}
+                            <span class="inline-flex items-center justify-center w-10 h-10 text-gray-300 rounded-full cursor-not-allowed">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </span>
+                            {% endif %}
+                        </nav>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+
+
+    <!-- Expert Partner Section -->
+    <section class="py-24 px-6 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+                <div class="max-w-2xl">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-[2px] bg-accent"></div>
+                        <span class="text-accent font-bold tracking-widest text-sm uppercase">Our Partners</span>
+                    </div>
+                    <h2 class="font-playfair text-4xl md:text-5xl font-black text-primary">Meet Our Partners</h2>
+                    <p class="mt-4 text-gray-500 leading-relaxed text-lg">Empowering climate resilience worldwide through research, data, and storytelling.</p>
+                </div>
+                            </div>
+
+            <style>
+                .custom-scrollbar::-webkit-scrollbar {
+                    height: 8px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: rgba(0,0,0,0.02);
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(0,0,0,0.15);
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(0,0,0,0.25);
+                }
+            </style>
+            <div class="flex overflow-x-auto gap-8 pb-8 snap-x snap-mandatory custom-scrollbar items-start">
+                {% for author in authors %}
+                <{% if author.slug %}a href="{% url 'author_detail' author.slug %}"{% else %}div{% endif %} class="group block min-w-[200px] md:min-w-[250px] max-w-[250px] snap-center text-center">
+                    <div class="relative mb-6 inline-block w-full">
+                        <!-- Shadow drop effect on hover -->
+                        <div class="absolute inset-0 bg-accent rounded-2xl translate-x-2 translate-y-2 opacity-0 group-hover:translate-x-3 group-hover:translate-y-3 group-hover:opacity-100 transition-all duration-300"></div>
+                        {% if author.photo %}
+                        <img src="{{ author.photo.url }}" class="w-full aspect-square rounded-2xl object-cover border-4 border-white shadow-lg relative z-10 grayscale group-hover:grayscale-0 transition duration-500 group-hover:shadow-xl">
+                        {% else %}
+                        <div class="w-full aspect-square rounded-2xl bg-primary/10 flex items-center justify-center text-primary text-5xl font-playfair border-4 border-white shadow-lg relative z-10 group-hover:shadow-xl transition duration-500">
+                            {{ author.name|slice:":1" }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <h3 class="font-playfair text-xl font-bold text-primary group-hover:text-accent transition">{{ author.name }}</h3>
+                    <p class="text-[11px] text-gray-400 font-bold uppercase tracking-tighter mt-1">{{ author.role }}</p>
+                </{% if author.slug %}a{% else %}div{% endif %}>
+                {% endfor %}
+            </div>
+            </div>
+        </section>
+
+        <!-- Founder Section -->
+        {% if founder %}
+        <section id="about" class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="space-y-6">
+                    <div class="inline-block bg-accent/10 text-accent px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase">Founder Story</div>
+                    <h2 class="font-playfair text-3xl font-bold text-primary">{{ founder.name }}</h2>
+                    <div class="text-lg text-gray-600 leading-relaxed prose-custom">{{ founder.bio|safe }}</div>
+                </div>
+                <div class="relative">
+                    <div class="relative aspect-square rounded-3xl overflow-hidden border-8 border-white shadow-2xl max-w-md mx-auto">
+                        {% if founder.photo %}
+                        <img src="{{ founder.photo.url }}" class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - AS Climate Goal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1a5c3a', accent: '#d4860b' },
+                    fontFamily: { playfair: ['Playfair Display', 'serif'], sans: ['DM Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#faf8f4] font-sans min-h-screen flex items-center justify-center p-6 text-center">
+
+    <div class="max-w-xl animate-fade-in">
+        <div class="relative mb-12">
+            <h1 class="font-playfair text-[12rem] font-bold text-primary/5 leading-none">404</h1>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-32 h-32 bg-primary text-white rounded-[2.5rem] shadow-2xl flex items-center justify-center rotate-12 group hover:rotate-0 transition duration-500">
+                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="font-playfair text-4xl font-bold text-primary mb-4">Lost in the Wilderness?</h2>
+        <p class="text-gray-500 text-lg mb-10 leading-relaxed">
+            The page you are looking for has either been moved, deleted, or never existed. Let's get you back to safety.
+        </p>
+
+        <a href="/" class="inline-flex items-center gap-3 bg-primary text-white px-10 py-4 rounded-full font-bold shadow-xl shadow-primary/20 hover:bg-opacity-90 transition duration-300">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            Return to Homepage
+        </a>
+    </div>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    </style>
+</body>
+</html>

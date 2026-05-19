@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AS Climate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1a5c3a', accent: '#d4860b' },
+                    fontFamily: { sans: ['DM Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#faf8f4] font-sans flex items-center justify-center min-h-screen p-6">
+
+    <div class="w-full max-w-md">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-primary text-white rounded-2xl shadow-xl mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800">Welcome Back</h1>
+            <p class="text-gray-500 mt-2">Log in to manage your climate content.</p>
+        </div>
+
+        <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl shadow-primary/5 border border-gray-100">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 text-red-500 p-4 rounded-2xl text-xs font-bold mb-4">
+                    {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                </div>
+                {% endif %}
+
+                {% for field in form %}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ field.label }}</label>
+                    <div class="auth-input-wrapper">
+                        {{ field }}
+                    </div>
+                    {% if field.errors %}
+                    <p class="text-red-500 text-[10px] font-bold">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="w-full bg-primary text-white py-4 rounded-2xl font-bold hover:bg-opacity-90 shadow-lg shadow-primary/20 transition duration-300">
+                    Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .auth-input-wrapper input {
+            width: 100%;
+            background: #f9fafb;
+            border: 1px solid #f3f4f6;
+            padding: 1rem 1.25rem;
+            border-radius: 1.25rem;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        .auth-input-wrapper input:focus {
+            outline: none;
+            border-color: #1a5c3a;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(26, 92, 58, 0.05);
+        }
+    </style>
+</body>
+</html>

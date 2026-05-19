@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - AS Climate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1a5c3a', accent: '#d4860b' },
+                    fontFamily: { sans: ['DM Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#faf8f4] font-sans flex items-center justify-center min-h-screen p-6">
+
+    <div class="w-full max-w-md">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-accent text-white rounded-2xl shadow-xl mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800">Create Account</h1>
+            <p class="text-gray-500 mt-2">Join the climate action team.</p>
+        </div>
+
+        <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl shadow-primary/5 border border-gray-100">
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 text-red-500 p-4 rounded-2xl text-xs font-bold mb-4">
+                    {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                </div>
+                {% endif %}
+
+                {% for field in form %}
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ field.label }}</label>
+                    <div class="auth-input-wrapper">
+                        {{ field }}
+                    </div>
+                    {% if field.help_text %}
+                    <p class="text-[10px] text-gray-400 leading-tight">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                    <p class="text-red-500 text-[10px] font-bold">{{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="w-full bg-accent text-white py-4 rounded-2xl font-bold hover:bg-opacity-90 shadow-lg shadow-accent/20 transition duration-300 mt-6">
+                    Create Account
+                </button>
+            </form>
+        </div>
+
+        <p class="text-center mt-8 text-gray-500 text-sm">
+            Already have an account? 
+            <a href="{% url 'login' %}" class="text-primary font-bold hover:underline">Sign in instead</a>
+        </p>
+    </div>
+
+    <style>
+        .auth-input-wrapper input {
+            width: 100%;
+            background: #f9fafb;
+            border: 1px solid #f3f4f6;
+            padding: 1rem 1.25rem;
+            border-radius: 1.25rem;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        .auth-input-wrapper input:focus {
+            outline: none;
+            border-color: #d4860b;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(212, 134, 11, 0.05);
+        }
+        ul { list-style: disc; padding-left: 1.5rem; font-size: 10px; color: #9ca3af; margin-top: 4px; }
+    </style>
+</body>
+</html>

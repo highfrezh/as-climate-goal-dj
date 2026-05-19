@@ -1,0 +1,219 @@
+{% extends 'articles/dashboard/base.html' %}
+{% block content %}
+
+<header class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+        <div class="flex items-center gap-3 mb-2">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 text-blue-600 flex items-center justify-center shadow-inner">
+                <i class="fas fa-inbox text-xl"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-gray-800 tracking-tight">Inquiries Inbox</h2>
+        </div>
+        <p class="text-gray-500 ml-16">View and respond to direct contact messages submitted by visitors.</p>
+    </div>
+    
+    <!-- Filter Controls -->
+    <div class="flex gap-2 bg-gray-100 p-1.5 rounded-2xl border border-gray-200/50 self-start md:self-auto shadow-inner">
+        <a href="?status=all" class="px-4 py-2 rounded-xl text-xs font-bold transition-all {% if status_filter == 'all' %}bg-white text-gray-800 shadow-sm{% else %}text-gray-500 hover:text-gray-800{% endif %}">
+            All Messages
+        </a>
+        <a href="?status=unread" class="px-4 py-2 rounded-xl text-xs font-bold transition-all {% if status_filter == 'unread' %}bg-white text-gray-800 shadow-sm{% else %}text-gray-500 hover:text-gray-800{% endif %}">
+            Unread
+        </a>
+        <a href="?status=read" class="px-4 py-2 rounded-xl text-xs font-bold transition-all {% if status_filter == 'read' %}bg-white text-gray-800 shadow-sm{% else %}text-gray-500 hover:text-gray-800{% endif %}">
+            Read
+        </a>
+    </div>
+</header>
+
+<div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+        <h3 class="font-bold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-envelope text-gray-400"></i> Direct Messages List
+        </h3>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-50/50 text-gray-400 text-xs uppercase tracking-widest border-b border-gray-100">
+                    <th class="px-6 py-4 font-semibold w-8"></th>
+                    <th class="px-6 py-4 font-semibold">Sender</th>
+                    <th class="px-6 py-4 font-semibold">Subject</th>
+                    <th class="px-6 py-4 font-semibold">Date Received</th>
+                    <th class="px-6 py-4 font-semibold text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-sm">
+                {% for msg in inbox_messages %}
+                <tr id="msg-row-{{ msg.pk }}" class="hover:bg-gray-50/80 transition-colors group cursor-pointer {% if not msg.is_read %}font-bold text-gray-900 bg-blue-50/10{% else %}text-gray-600{% endif %}" onclick="openMessageModal('{{ msg.pk }}', '{{ msg.name|escapejs }}', '{{ msg.email|escapejs }}', '{{ msg.subject|escapejs }}', '{{ msg.message|escapejs }}', '{{ msg.created_at|date:'M d, Y H:i'|escapejs }}', {{ msg.is_read|yesno:'true,false' }})">
+                    <td class="px-6 py-4">
+                        {% if not msg.is_read %}
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block ring-4 ring-blue-100"></span>
+                        {% else %}
+                        <span class="w-2.5 h-2.5 rounded-full bg-gray-300 inline-block"></span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-gray-800">{{ msg.name }}</div>
+                        <div class="text-xs text-gray-400 font-medium">{{ msg.email }}</div>
+                    </td>
+                    <td class="px-6 py-4 max-w-xs truncate">{{ msg.subject }}</td>
+                    <td class="px-6 py-4 text-gray-500 font-medium">{{ msg.created_at|date:"M d, Y H:i" }}</td>
+                    <td class="px-6 py-4 text-right" onclick="event.stopPropagation()">
+                        <div class="flex gap-2 justify-end">
+                            <button onclick="openDeleteModal('{% url 'delete_message' msg.pk %}', 'Are you sure you want to permanently delete this message from <strong>{{ msg.name }}</strong>?')" class="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center transition-colors shadow-sm">
+                                <i class="fas fa-trash-alt text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-3 text-gray-200"></i>
+                        <p>Your inbox is empty. Message inquiries from the website will appear here!</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if inbox_messages.has_other_pages %}
+    <div class="p-6 border-t border-gray-100 flex justify-center">
+        <nav class="inline-flex rounded-full shadow-sm bg-gray-50 p-1 border border-gray-200">
+            {% if inbox_messages.has_previous %}
+            <a href="?status={{ status_filter }}&page={{ inbox_messages.previous_page_number }}" class="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:bg-white hover:text-primary hover:shadow transition">
+                <i class="fas fa-chevron-left text-xs"></i>
+            </a>
+            {% endif %}
+            
+            <div class="px-2 flex items-center gap-1">
+                {% for num in inbox_messages.paginator.page_range %}
+                    {% if inbox_messages.number == num %}
+                        <span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white font-bold text-xs shadow-md">{{ num }}</span>
+                    {% elif num > inbox_messages.number|add:'-3' and num < inbox_messages.number|add:'3' %}
+                        <a href="?status={{ status_filter }}&page={{ num }}" class="w-8 h-8 flex items-center justify-center rounded-full text-gray-600 font-medium text-xs hover:bg-white hover:shadow transition">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if inbox_messages.has_next %}
+            <a href="?status={{ status_filter }}&page={{ inbox_messages.next_page_number }}" class="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:bg-white hover:text-primary hover:shadow transition">
+                <i class="fas fa-chevron-right text-xs"></i>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Premium Message View Modal -->
+<div id="messageModal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"></div>
+    
+    <!-- Modal Content -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl p-4">
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden animate-slide-up border border-gray-100">
+            <!-- Modal Header -->
+            <div class="p-6 md:p-8 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100 flex justify-between items-start gap-4">
+                <div>
+                    <span class="text-xs uppercase tracking-widest font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3" id="modal-date"></span>
+                    <h3 class="text-xl md:text-2xl font-extrabold text-gray-800 tracking-tight" id="modal-subject"></h3>
+                </div>
+                <button onclick="closeMessageModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center transition-colors shrink-0">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 md:p-8 space-y-6">
+                <!-- Sender Info -->
+                <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-lg shadow-inner" id="modal-avatar"></div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-bold">From</p>
+                        <h4 class="font-bold text-gray-800" id="modal-sender"></h4>
+                        <a href="#" class="text-xs text-primary font-semibold hover:underline" id="modal-email"></a>
+                    </div>
+                </div>
+                
+                <!-- Message Body -->
+                <div>
+                    <p class="text-xs text-gray-400 uppercase tracking-widest font-bold mb-3">Message</p>
+                    <div class="bg-white border border-gray-100 p-6 rounded-2xl min-h-[150px] max-h-[300px] overflow-y-auto text-gray-700 leading-relaxed text-sm whitespace-pre-wrap" id="modal-body"></div>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-6 border-t border-gray-100 bg-gray-50/50 flex gap-3 justify-end">
+                <a href="#" id="modal-reply-btn" class="px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/95 transition shadow-md inline-flex items-center gap-2 text-sm">
+                    <i class="fas fa-reply"></i> Reply via Email
+                </a>
+                <button onclick="closeMessageModal()" class="px-6 py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition text-sm">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let activeMessageId = null;
+    let activeMessageIsRead = false;
+
+    function openMessageModal(id, name, email, subject, message, date, isRead) {
+        activeMessageId = id;
+        activeMessageIsRead = isRead;
+
+        document.getElementById('modal-date').textContent = date;
+        document.getElementById('modal-subject').textContent = subject;
+        document.getElementById('modal-sender').textContent = name;
+        
+        const emailLink = document.getElementById('modal-email');
+        emailLink.textContent = email;
+        emailLink.href = `mailto:${email}?subject=Re: ${encodeURIComponent(subject)}`;
+        
+        document.getElementById('modal-reply-btn').href = `mailto:${email}?subject=Re: ${encodeURIComponent(subject)}`;
+        document.getElementById('modal-body').textContent = message;
+        document.getElementById('modal-avatar').textContent = name.slice(0, 1).toUpperCase();
+
+        const modal = document.getElementById('messageModal');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        // If the message was unread, mark it as read in the background
+        if (!isRead) {
+            fetch(`?read_id=${id}`)
+                .then(response => {
+                    // Update UI dynamically to show it's read
+                    const row = document.getElementById(`msg-row-${id}`);
+                    if (row) {
+                        row.classList.remove('font-bold', 'text-gray-900', 'bg-blue-50/10');
+                        row.classList.add('text-gray-600');
+                        
+                        // Update status indicator dot
+                        const indicator = row.querySelector('td span');
+                        if (indicator) {
+                            indicator.className = 'w-2.5 h-2.5 rounded-full bg-gray-300 inline-block';
+                        }
+                    }
+                })
+                .catch(err => console.error("Error marking message as read:", err));
+        }
+    }
+
+    function closeMessageModal() {
+        const modal = document.getElementById('messageModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+
+        // Reload the page if we read an unread message to sync global unread counts
+        if (!activeMessageIsRead) {
+            window.location.reload();
+        }
+    }
+</script>
+{% endblock %}

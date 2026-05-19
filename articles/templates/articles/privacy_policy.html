@@ -1,0 +1,42 @@
+{% extends 'articles/base.html' %}
+{% block content %}
+
+<!-- Hero Header Section -->
+<section class="relative bg-primary py-24 px-4 overflow-hidden border-b border-white/10">
+    <!-- Gradient Overlay & Subtle Details -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(230,126,34,0.12),transparent)] pointer-events-none"></div>
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+        <span class="inline-block bg-accent/20 text-accent text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 border border-accent/20">
+            Legal & Compliance
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight mb-6">
+            Privacy Policy
+        </h1>
+        <p class="text-white/60 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+            Understanding how we protect your information, uphold data privacy standards, and secure global climate insights.
+        </p>
+    </div>
+</section>
+
+<!-- Main Content Container -->
+<section class="py-20 px-4 bg-slate-900/10">
+    <div class="max-w-4xl mx-auto">
+        <!-- Content Card -->
+        <div class="bg-white rounded-3xl p-8 md:p-12 lg:p-16 border border-gray-100 shadow-xl shadow-slate-900/5 relative -mt-10 mb-8 animate-fade-in">
+            <!-- Dynamic Privacy Policy Content -->
+            <div class="prose prose-lg max-w-none prose-headings:text-primary prose-headings:font-bold prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-accent prose-a:font-semibold hover:prose-a:underline">
+                {% if settings.privacy_policy %}
+                    {{ settings.privacy_policy|safe }}
+                {% else %}
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Privacy Policy</h2>
+                    <p class="text-gray-600">Our privacy policy is currently being updated. Please check back soon or contact support for more details.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

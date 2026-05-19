@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: climate-cms
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: DEBUG
+        value: "False"
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "14498"
+      - key: DB_NAME
+        value: "defaultdb"
+      - key: DB_USER
+        value: "avnadmin"
+      - key: DB_PASSWORD
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true

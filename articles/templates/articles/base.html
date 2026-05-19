@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ settings.hero_title|default:"Climate Goal CMS" }}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% if settings.favicon %}
+    <link rel="icon" type="image/x-icon" href="{{ settings.favicon.url }}">
+    {% endif %}
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a5c3a',
+                        accent: '#d4860b',
+                    },
+                    fontFamily: {
+                        playfair: ['Playfair Display', 'serif'],
+                        sans: ['DM Sans', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .hover-scale { transition: transform 0.2s; }
+        .hover-scale:hover { transform: scale(1.02); }
+        html { scroll-behavior: smooth; }
+        .prose-custom p { margin-bottom: 1.5rem; line-height: 1.8; }
+        .prose-custom h2 { font-family: 'Playfair Display', serif; font-size: 1.875rem; font-weight: 700; color: #1a5c3a; margin-top: 2.5rem; margin-bottom: 1rem; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-[#faf8f4] font-sans text-[#1c1c1c]">
+
+    <!-- Navbar -->
+    <nav class="bg-primary text-white sticky top-0 z-50 px-6 py-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'index' %}" class="flex items-center gap-3 font-playfair text-xl font-bold">
+                {% if settings.logo %}
+                <img src="{{ settings.logo.url }}" class="w-10 h-10 rounded-full object-cover">
+                {% else %}
+                <svg class="w-8 h-8" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/><path d="M13 4C13 4 8.5 9 8.5 14a4.5 4.5 0 009 0C17.5 9 13 4 13 4z" fill="white" fill-opacity="0.9"/></svg>
+                {% endif %}
+                Climate <span class="text-accent">Goal</span>
+            </a>
+            
+            <!-- Desktop Links -->
+            <div class="hidden md:flex gap-6 items-center">
+                <a href="{% url 'index' %}#home" class="hover:text-accent transition text-sm font-medium">Home</a>
+                <a href="{% url 'index' %}#articles" class="hover:text-accent transition text-sm font-medium">Articles</a>
+                <a href="{% url 'index' %}#research" class="hover:text-accent transition text-sm font-medium">Resources</a>
+                <a href="{% url 'index' %}#about" class="hover:text-accent transition text-sm font-medium">About</a>
+                <a href="{% url 'contact' %}" class="hover:text-accent transition text-sm font-medium">Contact</a>
+            </div>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button id="mobile-menu-toggle" class="md:hidden block text-white focus:outline-none hover:text-accent transition">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-primary/95 backdrop-blur-lg border-t border-white/10 px-6 py-4 flex flex-col gap-4 absolute left-0 w-full shadow-xl transition-all duration-300">
+            <a href="{% url 'index' %}#home" class="hover:text-accent transition text-sm font-medium py-1">Home</a>
+            <a href="{% url 'index' %}#articles" class="hover:text-accent transition text-sm font-medium py-1">Articles</a>
+            <a href="{% url 'index' %}#research" class="hover:text-accent transition text-sm font-medium py-1">Resources</a>
+            <a href="{% url 'index' %}#about" class="hover:text-accent transition text-sm font-medium py-1">About</a>
+            <a href="{% url 'contact' %}" class="hover:text-accent transition text-sm font-medium py-1">Contact</a>
+        </div>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggle = document.getElementById('mobile-menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            if (toggle && menu) {
+                toggle.addEventListener('click', function() {
+                    menu.classList.toggle('hidden');
+                    const icon = toggle.querySelector('i');
+                    if (icon) {
+                        if (menu.classList.contains('hidden')) {
+                            icon.className = 'fas fa-bars text-xl';
+                        } else {
+                            icon.className = 'fas fa-times text-xl';
+                        }
+                    }
+                });
+
+                // Auto-close menu drawer when navigation links are clicked
+                const links = menu.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                        const icon = toggle.querySelector('i');
+                        if (icon) icon.className = 'fas fa-bars text-xl';
+                    });
+                });
+            }
+        });
+    </script>
+
+    {% block content %}{% endblock %}
+
+    <footer class="bg-primary text-white py-20 px-6 border-t border-white/5">
+        <div class="container mx-auto grid md:grid-cols-3 gap-12 items-center">
+            <div class="space-y-6">
+                <div class="flex items-center gap-3 font-playfair text-2xl font-bold">
+                    {% if settings.logo %}
+                    <img src="{{ settings.logo.url }}" class="w-10 h-10 rounded-full object-cover">
+                    {% else %}
+                    <svg class="w-10 h-10" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/><path d="M13 4C13 4 8.5 9 8.5 14a4.5 4.5 0 009 0C17.5 9 13 4 13 4z" fill="white" fill-opacity="0.9"/></svg>
+                    {% endif %}
+                    Climate <span class="text-accent">Goal</span>
+                </div>
+                <p class="text-white/60 text-sm max-w-xs leading-relaxed">
+                    Raising awareness and driving climate action through learning, creativity, and youth empowerment around the world.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-primary transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-primary transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-primary transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-primary transition"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-primary transition"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h4 class="font-bold uppercase tracking-widest text-xs text-accent">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li><a href="{% url 'index' %}#home" class="hover:text-white transition">Home</a></li>
+                        <li><a href="{% url 'index' %}#articles" class="hover:text-white transition">Latest Insights</a></li>
+                        <li><a href="{% url 'index' %}#research" class="hover:text-white transition">Resources</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="font-bold uppercase tracking-widest text-xs text-accent">Company</h4>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li><a href="{% url 'index' %}#about" class="hover:text-white transition">Our Story</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-white transition">Contact Us</a></li>
+                        <li><a href="{% url 'privacy_policy' %}" class="hover:text-white transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h4 class="font-bold uppercase tracking-widest text-xs text-accent">Newsletter</h4>
+                <form id="newsletter" action="{% url 'subscribe' %}" method="POST" class="flex flex-col gap-2">
+                    {% csrf_token %}
+                    <div class="flex">
+                        <input type="email" name="email" required placeholder="Email Address" class="bg-white/10 border border-white/20 px-4 py-3 rounded-l-xl focus:outline-none focus:border-accent flex-1 text-sm text-white placeholder-white/50">
+                        <button type="submit" class="bg-accent text-white px-6 py-3 rounded-r-xl font-bold text-sm hover:bg-opacity-90 transition">Join</button>
+                    </div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="text-[11px] font-medium {% if message.tags == 'error' %}text-red-400{% elif message.tags == 'success' %}text-green-400{% else %}text-blue-300{% endif %}">
+                                {{ message }}
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-[10px] text-white/40 italic">Stay updated with the latest climate resilience news.</p>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        <div class="container mx-auto mt-20 pt-8 border-t border-white/10 text-center text-white/30 text-[10px] uppercase tracking-widest font-bold">
+            &copy; {% now "Y" %} Alimat Sustainability Climate Goal. Built for Global Resilience.
+        </div>
+    </footer>
+</body>
+</html>

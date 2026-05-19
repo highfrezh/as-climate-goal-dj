@@ -1,0 +1,43 @@
+Privacy Policy
+Effective Date: May 18, 2026
+
+At Alimat Sustainability Climate Goal (AS Climate), we are committed to safeguarding your privacy and ensuring the security of your personal data. This Privacy Policy describes how we collect, use, disclose, and protect your information when you visit our website, subscribe to our newsletter, read our climate research, or interact with our academic content.
+
+1. Information We Collect
+We only collect information that is necessary to provide you with high-quality climate research, insights, and newsletters.
+
+Newsletter Subscribers: When you subscribe to our newsletter in the footer of our website, we collect your email address and the exact timestamp of your signup.
+Academic and Article Authors: For authors featured on our platform, we display professional biographical information, including names, titles, bios, and profile photographs.
+Usage Data (Optional): We may automatically collect standard web server logs and analytical data, such as your IP address, browser type, and page access times to help optimize site performance.
+2. How We Use Your Information
+We use the collected information solely for the following purposes:
+
+To distribute academic updates, climate newsletters, and resilience bulletins that you have explicitly opted into.
+To showcase recognized researchers and authors who contribute to our global climate goals.
+To monitor, maintain, and secure our website against security threats, spam, or abuse.
+To comply with global data protection standards and legal requirements.
+3. Data Storage, Security, and Retention
+We implement industry-standard technical and organizational security measures to protect your personal information:
+
+Secure Database: Your email and subscription details are stored in secure databases protected by modern Django security frameworks.
+No Sharing with Third Parties: We never sell, trade, rent, or distribute your email address or personal details to third-party advertisers or external organizations.
+Retention: We retain newsletter subscriber details only as long as you choose to remain subscribed. You may request deletion at any time.
+4. Your Rights and Choices
+You have full control over your personal data:
+
+Unsubscribe: You can unsubscribe from our communication list at any time. If you wish to be permanently removed, please contact our compliance team.
+Access & Correction: You have the right to request access to the information we hold about you or request corrections to your author biography.
+Right to Deletion: You can request that we completely erase your email address from our subscriber databases.
+5. Cookies and Analytics
+Our website may use standard cookies to improve your browsing experience, remember session states (such as administrative logins), and analyze aggregated website traffic patterns. You can disable cookies through your individual browser settings without losing access to our core content.
+
+6. Updates to This Policy
+We may periodically update this Privacy Policy to reflect changing legal requirements or security enhancements. We encourage visitors to review this page frequently for updates.
+
+7. Contact Us
+If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact our Compliance Officer:
+
+Email: 
+
+privacy@alimatsustainability.org
+Address: Alimat Sustainability Climate Goal, Global Resilience Hub
