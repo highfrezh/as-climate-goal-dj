@@ -1,0 +1,16 @@
+name: Render & Aiven Keep Alive
+
+on:
+  schedule:
+    # Runs automatically every 10 minutes 24/7
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual triggers directly from the GitHub Actions tab
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Keep Alive Ping
+        run: |
+          # Replace the URL below with your actual deployed Render URL once launched!
+          curl -s -X GET "https://as-climate-goal-dj.onrender.com/ping/"

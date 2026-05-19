@@ -392,3 +392,19 @@ def delete_message(request, pk):
     msg.delete()
     messages.success(request, "Message deleted successfully.")
     return redirect('manage_inbox')
+
+from django.http import JsonResponse
+from django.db import connection
+
+def ping(request):
+    """
+    Lightweight keep-alive endpoint. Executes a fast SELECT 1 on the Aiven MySQL
+    database to keep both the web service container and the database fully warmed up.
+    """
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        return JsonResponse({"status": "healthy", "database": "connected"})
+    except Exception as e:
+        return JsonResponse({"status": "unhealthy", "error": str(e)}, status=500)
