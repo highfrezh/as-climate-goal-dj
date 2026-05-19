@@ -2,7 +2,7 @@
 Django==6.0.3
 
 # Pure-Python MySQL Database Connector (Required for Aiven MySQL)
-PyMySQL==1.4.6
+PyMySQL>=1.2.1
 
 # Image processing library (Required for models.ImageField support)
 Pillow==12.1.1
